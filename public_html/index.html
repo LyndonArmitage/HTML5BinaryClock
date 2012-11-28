@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Binary Clock</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+	<div id="contentDiv" style="width: 100%; text-align:center">
+	<h2>Binary Clock using HTML5</h2>
+	<canvas id="watchCanvas" width="144" height="144" style="">You're browser does not support the HTML5 Canvas</canvas>
+	<script type="text/javascript">
+	    var c = document.getElementById("watchCanvas");
+	    var context = c.getContext("2d");
+	    
+	    var clockFace = new Image();
+	    clockFace.src = "binaryClock.png";
+	    clockFace.onload = function() {
+		drawTime();
+	    };
+	    
+    
+	    function drawTime() {
+		context.clearRect ( 0 , 0 , 144 , 144 );
+		context.drawImage(clockFace, 0, 0);
+		var date = new Date();
+		var hours = date.getHours().toString(2);
+		var mins = date.getMinutes().toString(2);
+		var secs = date.getSeconds().toString(2);
+
+		var boxHeight = 10;
+		var boxWidth = 10;
+		var ledAmount = 6;
+		
+		var xOffset = (144 / 6) - 10;
+		var yGap = 10;
+		
+
+		function drawString(string, Y, len) {
+		    if(string.length < len) {
+			var needed = len - string.length;
+			for(var n = 0;n < needed; n ++) {
+			    string = "0" + string;
+			}
+		    }
+		    context.strokeStyle = "black";
+		    context.lineWidth = 1;
+		    for(var n = 0;n < string.length; n ++) {
+			if(string[n] === "1") {
+			    context.fillStyle = "rgba(255, 0, 0, 1)";
+			}
+			else {
+			    context.fillStyle = "rgba(255, 0, 0, 0.1)";
+			}
+			context.fillRect((n*boxWidth)+xOffset+(yGap*n), Y, boxWidth, boxHeight);
+			context.strokeRect((n*boxWidth)+xOffset+(yGap*n), Y, boxWidth, boxHeight);
+		    }
+		}
+		var hoursY = 20;
+		var minsY = hoursY*2;
+		var secsY = hoursY*3;
+		drawString(hours, hoursY, ledAmount);
+		drawString(mins, minsY, ledAmount);
+		drawString(secs, secsY, ledAmount);
+		setTimeout('drawTime()',1000);
+	    }
+	
+	</script>
+	</div>
+    </body>
+</html>
